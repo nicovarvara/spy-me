@@ -25,4 +25,4 @@ for ($i = 0; $i -lt $numberOfCaptures; $i++) {
 }
 
 
-[IO.Compression.ZipFile]::CreateFromDirectory($outputDir, $env:TEMP\collection.zip)
+[IO.Compression.ZipFile]::CreateFromDirectory($outputDir, "$env:TEMP\collection.zip")
