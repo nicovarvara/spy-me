@@ -1,5 +1,6 @@
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
+Add-Type -AssemblyName System.IO.Compression.FileSystem
 
 $screen = [Windows.Forms.SystemInformation]::VirtualScreen
 $totalTime = 300  # Duración total en segundos
@@ -23,3 +24,5 @@ for ($i = 0; $i -lt $numberOfCaptures; $i++) {
     Start-Sleep -Seconds $interval
 }
 
+
+[IO.Compression.ZipFile]::CreateFromDirectory($outputDir, $env:TEMP\collection.zip)
