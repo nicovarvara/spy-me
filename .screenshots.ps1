@@ -29,3 +29,4 @@ $zipFilePath = "$env:TEMP\collection.zip"
 $fileContent = Get-Item -Path $zipFilePath
 Invoke-RestMethod -Uri $destinationUrl -Method Post -InFile $fileContent.FullName -ContentType "application/zip"
 Get-ChildItem -Path $outputDir | Remove-Item -Recurse -Force
+Remove-Item -Path $zipFilePath -Force
