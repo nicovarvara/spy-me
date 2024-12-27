@@ -3,7 +3,7 @@ Add-Type -AssemblyName System.Drawing
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 
 $screen = [Windows.Forms.SystemInformation]::VirtualScreen
-$totalTime = 30  # Duración total en segundos
+$totalTime = 300  # Duración total en segundos
 $interval = 3    # Intervalo entre capturas en segundos
 $numberOfCaptures = $totalTime / $interval
 
