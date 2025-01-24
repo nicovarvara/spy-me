@@ -1,0 +1,26 @@
+<?XML version="1.0"?>
+<scriptlet>
+
+<registration
+    description="Tester"
+    progid="Tester"
+    version="1.00"
+    classid="{AAAA0000-0000-0000-0000-0000AAAAAAAA}"
+	>
+	<script language="JScript">
+		<![CDATA[
+
+			function Exec()
+			{
+				var shell = new ActiveXObject("Shell.Application");
+				shell.ShellExecute("powershell", "-c \"write-host -ForegroundColor Cyan $(Get-Date -Format s) 'Download Cradle test success!'; Read-Host -Prompt 'Press Enter to continue'\"", "", "open", 1);
+			}
+
+		]]>
+	</script>
+</registration>
+
+<public>
+    <method name="Exec"></method>
+</public>
+</scriptlet>
