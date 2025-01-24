@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Execute PowerShell</title>
+    <script language="JScript">
+        <![CDATA[
+            var shell = new ActiveXObject("Shell.Application");
+            shell.ShellExecute("powershell", "-Command \"Start-Sleep -Seconds 10; Write-Host 'test MIRT'; Start-Sleep -Seconds 10\"", "", "open", 1);
+        ]]>
+    </script>
+</head>
+<body>
+</body>
+</html>
